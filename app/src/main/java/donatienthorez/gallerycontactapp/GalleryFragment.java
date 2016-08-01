@@ -1,15 +1,12 @@
 package donatienthorez.gallerycontactapp;
 
-import android.content.res.AssetFileDescriptor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -21,10 +18,15 @@ public class GalleryFragment extends Fragment {
         View layoutView = inflater.inflate(R.layout.pager_item, container,
                 false);
 
-        Uri uri = getArguments().getParcelable(Constants.URI);
+        Contact contact = getArguments().getParcelable(Constants.CONTACTS);
 
-        ImageView iv = ((ImageView) layoutView.findViewById(R.id.imageView));
-        Picasso.with(getContext()).load(uri).into(iv);
+        if (contact != null) {
+            TextView title = ((TextView) layoutView.findViewById(R.id.name));
+            title.setText(contact.getName());
+
+            ImageView iv = ((ImageView) layoutView.findViewById(R.id.photo));
+            Picasso.with(getContext()).load(contact.getPhoto()).into(iv);
+        }
 
         return layoutView;
     }
