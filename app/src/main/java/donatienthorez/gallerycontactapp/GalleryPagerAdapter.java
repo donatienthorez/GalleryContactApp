@@ -11,9 +11,13 @@ public class GalleryPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<Contact> contacts;
 
-    public GalleryPagerAdapter(FragmentManager fm, ArrayList<Contact> contacts) {
+    public GalleryPagerAdapter(FragmentManager fm) {
         super(fm);
+    }
+
+    public void setContacts(ArrayList<Contact> contacts) {
         this.contacts = contacts;
+        notifyDataSetChanged();
     }
 
     @Override

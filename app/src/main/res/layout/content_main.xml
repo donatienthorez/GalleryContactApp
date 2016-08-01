@@ -11,11 +11,13 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/buttonsLayout"
         android:layout_marginTop="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible">
         <Button
             android:id="@+id/previous"
             android:layout_width="wrap_content"
