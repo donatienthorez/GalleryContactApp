@@ -5,8 +5,6 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -14,22 +12,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-
 
 public class MainActivity extends FragmentActivity {
 
     ViewPager viewPager;
     GalleryPagerAdapter galleryPagerAdapter;
 
-
-    @SuppressLint("InlinedApi")
     private static final String[] PROJECTION = {
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME
@@ -43,7 +34,7 @@ public class MainActivity extends FragmentActivity {
         ContentResolver cr = getContentResolver();
         Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, PROJECTION, null, null, null);
 
-        ArrayList<AssetFileDescriptor> arrayList = new ArrayList<>();
+        ArrayList<Uri> arrayList = new ArrayList<>();
 
         if(cursor.moveToFirst())
         {
@@ -54,7 +45,7 @@ public class MainActivity extends FragmentActivity {
                 try  {
                     AssetFileDescriptor fd = getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
                     if (fd != null) {
-                        arrayList.add(fd);
+                        arrayList.add(displayPhotoUri);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -66,27 +57,5 @@ public class MainActivity extends FragmentActivity {
         galleryPagerAdapter = new GalleryPagerAdapter(getSupportFragmentManager(), arrayList);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(galleryPagerAdapter);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
