@@ -42,7 +42,6 @@ public class MainActivity extends FragmentActivity {
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(galleryPagerAdapter);
-
         // Request permissions to read contact for Android 6 and higher.
         int hasReadContactsPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
         if (hasReadContactsPermission != PackageManager.PERMISSION_GRANTED) {
@@ -50,6 +49,23 @@ public class MainActivity extends FragmentActivity {
         } else {
             new ImportContacts().execute();
         }
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                new ImportContacts().execute();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     /**
@@ -80,56 +96,14 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
-    /**
-     * Returns the contacts that have picture from the phone.
-     */
-    public ArrayList<Contact> getContacts(){
 
-        final String[] PROJECTION = {
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.DISPLAY_NAME
-        };
-
-        ContentResolver cr = getContentResolver();
-        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, PROJECTION, null, null, null);
-
-        ArrayList<Contact> contacts = new ArrayList<>();
-
-        if(cursor.moveToFirst())
-        {
-            for (int i = 0; i<1; i++) {
-            while (cursor.moveToNext()) {
-                String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(contactId));
-                Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
-
-                try  {
-                    AssetFileDescriptor fd = getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
-                    if (fd != null) {
-                        String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                        contacts.add(new Contact(displayPhotoUri, name));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-                cursor.moveToFirst();
-
-            }
-            cursor.close();
-        }
-        return contacts;
-    }
-
-
-    private class ImportContacts extends AsyncTask<Void, Void, ArrayList<Contact>> {
+    public class ImportContacts extends AsyncTask<Void, Void, ArrayList<Contact>> {
         protected ArrayList<Contact> doInBackground(Void... urls) {
-            return getContacts();
+            return ImportContactHelper.getContacts();
         }
 
-        protected void onPostExecute(ArrayList<Contact> result) {
-            contacts = getContacts();
-            galleryPagerAdapter.setContacts(contacts);
+        protected void onPostExecute(ArrayList<Contact> contacts) {
+            galleryPagerAdapter.addContacts(contacts);
             instantiateViewPagerButtons();
         }
     }

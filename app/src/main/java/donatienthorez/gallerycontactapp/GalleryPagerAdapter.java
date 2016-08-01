@@ -1,10 +1,17 @@
 package donatienthorez.gallerycontactapp;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GalleryPagerAdapter extends FragmentStatePagerAdapter {
@@ -17,6 +24,17 @@ public class GalleryPagerAdapter extends FragmentStatePagerAdapter {
 
     public void setContacts(ArrayList<Contact> contacts) {
         this.contacts = contacts;
+        notifyDataSetChanged();
+    }
+
+    public void addContact(Contact contact) {
+        contacts.add(contact);
+
+        notifyDataSetChanged();
+    }
+
+    public void addContacts(ArrayList<Contact> contacts){
+        this.contacts.addAll(contacts);
         notifyDataSetChanged();
     }
 
