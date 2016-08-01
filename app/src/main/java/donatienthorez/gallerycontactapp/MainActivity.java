@@ -9,14 +9,17 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity {
 
-    ViewPager viewPager;
-    GalleryPagerAdapter galleryPagerAdapter;
+    private ViewPager viewPager;
+    private GalleryPagerAdapter galleryPagerAdapter;
+    private ArrayList<Contact> contacts;
 
     private static final String[] PROJECTION = {
             ContactsContract.Contacts._ID,
@@ -31,7 +34,7 @@ public class MainActivity extends FragmentActivity {
         ContentResolver cr = getContentResolver();
         Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, PROJECTION, null, null, null);
 
-        ArrayList<Contact> contacts = new ArrayList<>();
+         contacts = new ArrayList<>();
 
         if(cursor.moveToFirst())
         {
@@ -56,5 +59,25 @@ public class MainActivity extends FragmentActivity {
         galleryPagerAdapter = new GalleryPagerAdapter(getSupportFragmentManager(), contacts);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(galleryPagerAdapter);
+
+        Button next = (Button) findViewById(R.id.next);
+        Button previous = (Button) findViewById(R.id.previous);
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewPager.getCurrentItem()+1 < contacts.size()) {
+                    viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                }
+            }
+        });
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewPager.getCurrentItem()-1 >= 0) {
+                    viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+                }
+            }
+        });
     }
 }
