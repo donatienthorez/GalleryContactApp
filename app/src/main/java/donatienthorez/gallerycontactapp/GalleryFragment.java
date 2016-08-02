@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import donatienthorez.gallerycontactapp.models.Contact;
+
 public class GalleryFragment extends Fragment {
 
     @Override

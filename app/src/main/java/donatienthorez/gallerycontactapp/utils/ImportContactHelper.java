@@ -1,4 +1,4 @@
-package donatienthorez.gallerycontactapp;
+package donatienthorez.gallerycontactapp.utils;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -8,6 +8,10 @@ import android.provider.ContactsContract;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import donatienthorez.gallerycontactapp.Constants;
+import donatienthorez.gallerycontactapp.GalleryContactApplication;
+import donatienthorez.gallerycontactapp.models.Contact;
 
 public class ImportContactHelper {
 

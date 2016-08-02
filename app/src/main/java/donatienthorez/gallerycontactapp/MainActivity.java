@@ -11,9 +11,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+
+import donatienthorez.gallerycontactapp.models.Contact;
+import donatienthorez.gallerycontactapp.utils.GalleryPagerAdapter;
+import donatienthorez.gallerycontactapp.utils.ImportContactHelper;
 
 public class MainActivity extends FragmentActivity {
 

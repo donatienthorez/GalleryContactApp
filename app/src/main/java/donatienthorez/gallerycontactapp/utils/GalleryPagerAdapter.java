@@ -1,4 +1,4 @@
-package donatienthorez.gallerycontactapp;
+package donatienthorez.gallerycontactapp.utils;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
+
+import donatienthorez.gallerycontactapp.Constants;
+import donatienthorez.gallerycontactapp.GalleryFragment;
+import donatienthorez.gallerycontactapp.models.Contact;
 
 public class GalleryPagerAdapter extends FragmentStatePagerAdapter {
 

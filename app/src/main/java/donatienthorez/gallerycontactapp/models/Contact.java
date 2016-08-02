@@ -1,4 +1,4 @@
-package donatienthorez.gallerycontactapp;
+package donatienthorez.gallerycontactapp.models;
 
 import android.net.Uri;
 import android.os.Parcel;
