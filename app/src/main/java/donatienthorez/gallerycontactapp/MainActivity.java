@@ -1,15 +1,9 @@
 package donatienthorez.gallerycontactapp;
 
 import android.Manifest;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.pm.PackageManager;
-import android.content.res.AssetFileDescriptor;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -19,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity {
@@ -28,7 +21,6 @@ public class MainActivity extends FragmentActivity {
     private GalleryPagerAdapter galleryPagerAdapter;
     private ArrayList<Contact> contacts;
 
-    final private int REQUEST_READ_CONTACTS = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +34,11 @@ public class MainActivity extends FragmentActivity {
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(galleryPagerAdapter);
+
         // Request permissions to read contact for Android 6 and higher.
         int hasReadContactsPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
         if (hasReadContactsPermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_READ_CONTACTS);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, Constants.REQUEST_READ_CONTACTS);
         } else {
             new ImportContacts().execute();
         }
@@ -72,9 +65,6 @@ public class MainActivity extends FragmentActivity {
      * Displays and instantiates the buttons of the view pager
      */
     public void instantiateViewPagerButtons(){
-        LinearLayout buttonsLayout = (LinearLayout) findViewById(R.id.buttonsLayout);
-        buttonsLayout.setVisibility(View.VISIBLE);
-
         Button previous = (Button) findViewById(R.id.previous);
         Button next = (Button) findViewById(R.id.next);
 
@@ -112,7 +102,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_READ_CONTACTS: {
+            case Constants.REQUEST_READ_CONTACTS: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     new ImportContacts().execute();

@@ -2,7 +2,6 @@ package donatienthorez.gallerycontactapp;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
-import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -12,39 +11,28 @@ import java.util.ArrayList;
 
 public class ImportContactHelper {
 
-    private static volatile int cursorFarestPosition = 0;
-    private static final int ITEM_TO_LOAD = 3;
-
+    private static volatile int cursorFurthestPosition = 0;
+    private static Cursor cursor;
 
     /**
      * Returns the contacts that have picture from the phone.
      */
     public static ArrayList<Contact> getContacts(){
-
-        final String[] PROJECTION = {
-                ContactsContract.Contacts._ID,
-                ContactsContract.Contacts.DISPLAY_NAME
-        };
-
-        ContentResolver cr = GalleryContactAppApplication.getContext().getContentResolver();
-        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, PROJECTION, null, null, null);
+        ContentResolver contentResolver = GalleryContactApplication.getContext().getContentResolver();
+        cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, Constants.PROJECTION, null, null, null);
 
         ArrayList<Contact> contacts = new ArrayList<>();
 
-        if(cursor.moveToPosition(cursorFarestPosition))
+        if(cursor.moveToPosition(cursorFurthestPosition))
         {
             while (cursor.moveToNext()) {
-                String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(contactId));
-                final Uri displayPhotoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
 
+                Uri photoUri = buildPhotoUri();
                 try  {
-                    AssetFileDescriptor fd = cr.openAssetFileDescriptor(displayPhotoUri, "r");
-                    if (fd != null) {
-                        final String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                        contacts.add(new Contact(displayPhotoUri, name));
-                        if (contacts.size() == ITEM_TO_LOAD) {
-                            cursorFarestPosition = cursor.getPosition();
+                    if (contentResolver.openAssetFileDescriptor(photoUri, Constants.READ_ONLY) != null) {
+                        contacts.add(buildContact(photoUri));
+                        if (contacts.size() == Constants.ITEM_PER_PAGE) {
+                            cursorFurthestPosition = cursor.getPosition();
                             return contacts;
                         }
                     }
@@ -54,7 +42,18 @@ public class ImportContactHelper {
             }
             cursor.close();
         }
-        cursorFarestPosition = cursor.getPosition();
+        cursorFurthestPosition = cursor.getPosition();
         return contacts;
+    }
+
+    private static Uri buildPhotoUri(){
+        String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(contactId));
+        return Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.DISPLAY_PHOTO);
+    }
+
+    private static Contact buildContact(Uri displayPhotoUri){
+        final String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+        return new Contact(displayPhotoUri, name);
     }
 }

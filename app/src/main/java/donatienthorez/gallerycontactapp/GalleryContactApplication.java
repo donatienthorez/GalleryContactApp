@@ -3,7 +3,7 @@ package donatienthorez.gallerycontactapp;
 import android.app.Application;
 import android.content.Context;
 
-public class GalleryContactAppApplication extends Application{
+public class GalleryContactApplication extends Application{
 
     private static Context context;
 

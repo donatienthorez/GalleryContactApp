@@ -21,10 +21,10 @@ public class GalleryFragment extends Fragment {
         Contact contact = getArguments().getParcelable(Constants.CONTACTS);
 
         if (contact != null) {
-            TextView title = ((TextView) layoutView.findViewById(R.id.name));
+            TextView title = ((TextView) layoutView.findViewById(R.id.contact_name));
             title.setText(contact.getName());
 
-            ImageView iv = ((ImageView) layoutView.findViewById(R.id.photo));
+            ImageView iv = ((ImageView) layoutView.findViewById(R.id.contact_photo));
             Picasso.with(getContext()).load(contact.getPhoto()).into(iv);
         }
 

@@ -4,8 +4,6 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
 public class Contact implements Parcelable{
     Uri photo;
     String name;
@@ -19,16 +17,8 @@ public class Contact implements Parcelable{
         return photo;
     }
 
-    public void setPhoto(Uri photo) {
-        this.photo = photo;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
