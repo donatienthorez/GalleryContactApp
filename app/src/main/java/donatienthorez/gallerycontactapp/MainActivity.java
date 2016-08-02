@@ -42,6 +42,7 @@ public class MainActivity extends FragmentActivity {
         } else {
             new ImportContacts().execute();
         }
+        instantiateViewPagerButtons();
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -51,7 +52,9 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onPageSelected(int position) {
-                new ImportContacts().execute();
+                if ((position % Constants.ITEM_PER_PAGE) == 2) {
+                    new ImportContacts().execute();
+                }
             }
 
             @Override
@@ -71,7 +74,7 @@ public class MainActivity extends FragmentActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (viewPager.getCurrentItem()+1 < contacts.size()) {
+                if (viewPager.getCurrentItem() + 1 < contacts.size()) {
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                 }
             }
@@ -79,7 +82,7 @@ public class MainActivity extends FragmentActivity {
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (viewPager.getCurrentItem()-1 >= 0) {
+                if (viewPager.getCurrentItem() - 1 >= 0) {
                     viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
                 }
             }
@@ -94,7 +97,6 @@ public class MainActivity extends FragmentActivity {
 
         protected void onPostExecute(ArrayList<Contact> contacts) {
             galleryPagerAdapter.addContacts(contacts);
-            instantiateViewPagerButtons();
         }
     }
 

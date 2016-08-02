@@ -5,7 +5,7 @@ import android.provider.ContactsContract;
 public class Constants {
     public final static String CONTACTS = "contacts";
 
-    public final static int ITEM_PER_PAGE = 3;
+    public final static int ITEM_PER_PAGE = 5;
 
 
     public final static String[] PROJECTION = {
